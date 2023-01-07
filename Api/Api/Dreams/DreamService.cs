@@ -2,6 +2,7 @@
 using Api.Types;
 using Core.Data.Records;
 using Core.Data.Repositories;
+using Core.Models.Mappers;
 using Core.Types;
 
 namespace Api.Api.Dreams;
@@ -47,12 +48,7 @@ public sealed class DreamService : IDreamService
 
         return new CreateDreamResponse
         {
-            Reference = dream.Reference,
-            CreatedAt = dream.CreatedAt,
-            Title = dream.Title,
-            Content = dream.Content,
-            DreamedAt = dream.DreamedAt,
-            Type = dream.Type
+            Dream = DreamMapper.Map(dream)
         };
     }
 
@@ -78,12 +74,7 @@ public sealed class DreamService : IDreamService
 
         return new UpdateDreamResponse
         {
-            Reference = dream.Reference,
-            CreatedAt = dream.CreatedAt,
-            Title = dream.Title,
-            Content = dream.Content,
-            DreamedAt = dream.DreamedAt,
-            Type = dream.Type
+            Dream = DreamMapper.Map(dream)
         };
     }
 
@@ -158,21 +149,11 @@ public sealed class DreamService : IDreamService
         return new GetReelResponse
         {
             Dreams = dreams
-                .Select(dream => new GetReelResponse.Dream
+                .Select(dream => new GetReelResponse.DreamDetails
                 {
-                    Reference = dream.Reference,
-                    CreatedAt = dream.CreatedAt,
-                    Title = dream.Title,
-                    Content = dream.Content,
-                    DreamedAt = dream.DreamedAt,
-                    Type = dream.Type,
-                    Reactions = dream.DreamUser.Select(x => x.Reaction).Where(x => x != null).ToList(),
-                    User = new GetReelResponse.User
-                    {
-                        Reference = dream.User.Reference,
-                        CreatedAt = dream.User.CreatedAt,
-                        Username = dream.User.Username
-                    }
+                    Dream = DreamMapper.Map(dream),
+                    User = UserMapper.Map(user),
+                    Reactions = dream.DreamUser.Select(x => x.Reaction).Where(x => x != null).ToList()
                 })
                 .ToList()
         };
