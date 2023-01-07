@@ -7,7 +7,7 @@ public sealed class AppSecrets
 
     public sealed class AuthDetails
     {
-        public string PasswordPaprika { get; init; } = null!;
+        public string PasswordPepper { get; init; } = null!;
         public string LoginTokenSecretKey { get; init; } = null!;
     }
 

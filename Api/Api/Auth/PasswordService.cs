@@ -12,18 +12,16 @@ public interface IPasswordService
 
 public sealed class PasswordService : IPasswordService
 {
-    private const string PEPPER = "7u@fEB$Jk@N!vtNFhc7F$K@8AAYaHHVarE3!e@sSjABL9Y3C3K";
-
-    private readonly string _paprika;
+    private readonly string _pepper;
 
     public PasswordService(AppSecrets appSecrets)
     {
-        _paprika = appSecrets.Auth.PasswordPaprika;
+        _pepper = appSecrets.Auth.PasswordPepper;
     }
 
     public string Hash(string password, Guid salt)
     {
-        var toHash = password + salt + PEPPER + _paprika;
+        var toHash = password + salt + _pepper;
 
         using var sha256 = SHA256.Create();
 
