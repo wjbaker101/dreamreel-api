@@ -10,7 +10,7 @@ public class UserRecord
     public virtual string Username { get; set; } = null!;
     public virtual string Password { get; set; } = null!;
     public virtual Guid PasswordSalt { get; set; }
-    public virtual string? AvatarUrl { get; set; }
+    public virtual string AvatarUrl { get; set; } = null!;
     public virtual ISet<DreamRecord> Dreams { get; init; } = new HashSet<DreamRecord>();
     public virtual ISet<UserRecord> Follows { get; init; } = new HashSet<UserRecord>();
     public virtual ISet<UserRecord> Followers { get; init; } = new HashSet<UserRecord>();
