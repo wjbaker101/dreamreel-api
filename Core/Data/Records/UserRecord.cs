@@ -10,6 +10,7 @@ public class UserRecord
     public virtual string Username { get; set; } = null!;
     public virtual string Password { get; set; } = null!;
     public virtual Guid PasswordSalt { get; set; }
+    public virtual string? AvatarUrl { get; set; }
     public virtual ISet<DreamRecord> Dreams { get; init; } = new HashSet<DreamRecord>();
     public virtual ISet<UserRecord> Follows { get; init; } = new HashSet<UserRecord>();
     public virtual ISet<UserRecord> Followers { get; init; } = new HashSet<UserRecord>();
@@ -27,6 +28,7 @@ public sealed class UserRecordMap : ClassMap<UserRecord>
         Map(x => x.Username, "username");
         Map(x => x.Password, "password");
         Map(x => x.PasswordSalt, "password_salt");
+        Map(x => x.AvatarUrl, "avatar_url");
         HasMany(x => x.Dreams).KeyColumn("user_id");
         HasManyToMany(x => x.Follows)
             .Schema("dream_reel")

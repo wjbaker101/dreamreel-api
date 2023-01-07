@@ -60,7 +60,8 @@ public sealed class UserService : IUserService
             CreatedAt = DateTime.UtcNow,
             Username = request.Username,
             Password = hashedPassword,
-            PasswordSalt = salt
+            PasswordSalt = salt,
+            AvatarUrl = avatarResult.Value
         });
 
         return new CreateUserResponse
