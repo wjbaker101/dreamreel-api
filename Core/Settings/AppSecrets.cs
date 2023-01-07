@@ -2,12 +2,13 @@
 
 public sealed class AppSecrets
 {
-    public LoginTokenDetails LoginToken { get; init; } = null!;
+    public AuthDetails Auth { get; init; } = null!;
     public DatabaseDetails Database { get; init; } = null!;
 
-    public sealed class LoginTokenDetails
+    public sealed class AuthDetails
     {
-        public string SecretKey { get; init; } = null!;
+        public string PasswordPaprika { get; init; } = null!;
+        public string LoginTokenSecretKey { get; init; } = null!;
     }
 
     public sealed class DatabaseDetails

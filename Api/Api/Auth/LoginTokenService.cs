@@ -21,7 +21,7 @@ public sealed class LoginTokenService : ILoginTokenService
 
     public LoginTokenService(AppSecrets appSecrets)
     {
-        _secretKey = appSecrets.LoginToken.SecretKey;
+        _secretKey = appSecrets.Auth.LoginTokenSecretKey;
     }
 
     public string Create(Guid userReference)
