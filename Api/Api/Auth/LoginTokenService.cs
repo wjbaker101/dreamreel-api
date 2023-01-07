@@ -2,6 +2,7 @@
 using Core.Types;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 namespace Api.Api.Auth;
@@ -25,14 +26,20 @@ public sealed class LoginTokenService : ILoginTokenService
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
-        var header = new JwtHeader(credentials);
 
-        var jwt = new JwtSecurityToken(header, new JwtPayload
+        var handler = new JwtSecurityTokenHandler();
+
+        var descriptor = new SecurityTokenDescriptor
         {
-            ["userReference"] = userReference
-        });
+            Expires = DateTime.UtcNow.AddDays(7),
+            SigningCredentials = credentials,
+            Subject = new ClaimsIdentity(new Claim[]
+            {
+                new("userReference", userReference.ToString())
+            })
+        };
 
-        return new JwtSecurityTokenHandler().WriteToken(jwt);
+        return handler.WriteToken(handler.CreateToken(descriptor));
     }
 
     public Result<Guid> Validate(string loginToken)
@@ -43,7 +50,6 @@ public sealed class LoginTokenService : ILoginTokenService
             {
                 ValidateIssuer = false,
                 ValidateAudience = false,
-                ValidateLifetime = false,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey))
             };
 
