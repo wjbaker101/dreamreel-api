@@ -7,7 +7,7 @@ namespace Api.Api.Users;
 public interface IUserValidationService
 {
     Result ValidatePassword(string password);
-    Result ValidateUsername(string username);
+    Result ValidateUsername(string username, long? userId);
 }
 
 public sealed class UserValidationService : IUserValidationService
@@ -54,10 +54,10 @@ public sealed class UserValidationService : IUserValidationService
         return Result.Success();
     }
 
-    public Result ValidateUsername(string username)
+    public Result ValidateUsername(string username, long? userId)
     {
         var existingUserResult = _userRepository.GetByUsername(username);
-        if (existingUserResult.IsSuccess)
+        if (existingUserResult.IsSuccess && existingUserResult.Value.Id != userId)
             return Result<CreateUserResponse>.Failure("A user already exists with that username.");
 
         return Result.Success();

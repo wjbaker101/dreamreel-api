@@ -43,7 +43,7 @@ public sealed class UserService : IUserService
         if (passwordValidResult.IsFailure)
             return Result<CreateUserResponse>.FromFailure(passwordValidResult);
 
-        var usernameValidResult = _userValidationService.ValidateUsername(request.Username);
+        var usernameValidResult = _userValidationService.ValidateUsername(request.Username, null);
         if (usernameValidResult.IsFailure)
             return Result<CreateUserResponse>.FromFailure(usernameValidResult);
 
@@ -91,7 +91,7 @@ public sealed class UserService : IUserService
         if (!userResult.TrySuccess(out var user))
             return Result<UpdateUserResponse>.FromFailure(userResult);
 
-        var usernameValidResult = _userValidationService.ValidateUsername(request.Username);
+        var usernameValidResult = _userValidationService.ValidateUsername(request.Username, user.Id);
         if (usernameValidResult.IsFailure)
             return Result<UpdateUserResponse>.FromFailure(usernameValidResult);
 
