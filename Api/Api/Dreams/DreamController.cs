@@ -58,7 +58,7 @@ public sealed class DreamController : ApiController
     }
 
     /// <summary>
-    /// Reacts to a dream (requires logged in user)
+    /// Reacts to a dream, with one of 😭😐😆😱 (requires logged in user)
     /// </summary>
     /// <param name="dreamReference"></param>
     /// <param name="request"></param>
