@@ -1,6 +1,6 @@
 ﻿using Api.Exceptions;
-using Api.Types;
 using Core.Data.Repositories;
+using Core.Models.Mappers;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Api.Api.Auth.Attributes;
@@ -31,10 +31,6 @@ public sealed class RequireUserAttribute : Attribute, IAuthorizationFilter
         if (user.IsFailure)
             throw new ApiForbiddenException();
 
-        context.HttpContext.Items["user"] = new RequestUser
-        {
-            Reference = user.Value.Reference,
-            Username = user.Value.Username
-        };
+        context.HttpContext.Items["user"] = UserMapper.Map(user.Value);
     }
 }

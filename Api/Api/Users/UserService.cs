@@ -1,8 +1,8 @@
 ﻿using Api.Api.Auth;
 using Api.Api.Users.Types;
-using Api.Types;
 using Core.Data.Records;
 using Core.Data.Repositories;
+using Core.Models;
 using Core.Models.Mappers;
 using Core.Types;
 
@@ -13,8 +13,8 @@ public interface IUserService
     Result<CreateUserResponse> CreateUser(CreateUserRequest request);
     Result<GetUserResponse> GetUser(Guid userReference);
     Result<UpdateUserResponse> UpdateUser(Guid userReference, UpdateUserRequest request);
-    Result FollowUser(RequestUser requestUser, Guid userToFollowReference);
-    Result UnFollowUser(RequestUser requestUser, Guid userToUnFollowReference);
+    Result FollowUser(UserModel requestUser, Guid userToFollowReference);
+    Result UnFollowUser(UserModel requestUser, Guid userToUnFollowReference);
 }
 
 public sealed class UserService : IUserService
@@ -115,7 +115,7 @@ public sealed class UserService : IUserService
         };
     }
 
-    public Result FollowUser(RequestUser requestUser, Guid userToFollowReference)
+    public Result FollowUser(UserModel requestUser, Guid userToFollowReference)
     {
         var userResult = _userRepository.GetByReference(requestUser.Reference);
         if (!userResult.TrySuccess(out var user))
@@ -135,7 +135,7 @@ public sealed class UserService : IUserService
         return Result.Success();
     }
 
-    public Result UnFollowUser(RequestUser requestUser, Guid userToUnFollowReference)
+    public Result UnFollowUser(UserModel requestUser, Guid userToUnFollowReference)
     {
         var userResult = _userRepository.GetByReference(requestUser.Reference);
         if (!userResult.TrySuccess(out var user))

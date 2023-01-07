@@ -1,7 +1,7 @@
 ﻿using Api.Api.Dreams.Types;
-using Api.Types;
 using Core.Data.Records;
 using Core.Data.Repositories;
+using Core.Models;
 using Core.Models.Mappers;
 using Core.Types;
 
@@ -9,11 +9,11 @@ namespace Api.Api.Dreams;
 
 public interface IDreamService
 {
-    Result<CreateDreamResponse> CreateDream(RequestUser requestUser, CreateDreamRequest request);
-    Result<UpdateDreamResponse> UpdateDream(RequestUser requestUser, Guid dreamReference, UpdateDreamRequest request);
-    Result ReactToDream(RequestUser requestUser, Guid dreamReference, ReactToDreamRequest request);
-    Result UnReactToDream(RequestUser requestUser, Guid dreamReference);
-    Result<GetReelResponse> GetReel(RequestUser requestUser);
+    Result<CreateDreamResponse> CreateDream(UserModel requestUser, CreateDreamRequest request);
+    Result<UpdateDreamResponse> UpdateDream(UserModel requestUser, Guid dreamReference, UpdateDreamRequest request);
+    Result ReactToDream(UserModel requestUser, Guid dreamReference, ReactToDreamRequest request);
+    Result UnReactToDream(UserModel requestUser, Guid dreamReference);
+    Result<GetReelResponse> GetReel(UserModel requestUser);
 }
 
 public sealed class DreamService : IDreamService
@@ -29,7 +29,7 @@ public sealed class DreamService : IDreamService
         _dreamUserRepository = dreamUserRepository;
     }
 
-    public Result<CreateDreamResponse> CreateDream(RequestUser requestUser, CreateDreamRequest request)
+    public Result<CreateDreamResponse> CreateDream(UserModel requestUser, CreateDreamRequest request)
     {
         var userResult = _userRepository.GetByReference(requestUser.Reference);
         if (!userResult.TrySuccess(out var user))
@@ -52,7 +52,7 @@ public sealed class DreamService : IDreamService
         };
     }
 
-    public Result<UpdateDreamResponse> UpdateDream(RequestUser requestUser, Guid dreamReference, UpdateDreamRequest request)
+    public Result<UpdateDreamResponse> UpdateDream(UserModel requestUser, Guid dreamReference, UpdateDreamRequest request)
     {
         var userResult = _userRepository.GetByReference(requestUser.Reference);
         if (!userResult.TrySuccess(out var user))
@@ -78,7 +78,7 @@ public sealed class DreamService : IDreamService
         };
     }
 
-    public Result ReactToDream(RequestUser requestUser, Guid dreamReference, ReactToDreamRequest request)
+    public Result ReactToDream(UserModel requestUser, Guid dreamReference, ReactToDreamRequest request)
     {
         var validReactions = new HashSet<string>
         {
@@ -117,7 +117,7 @@ public sealed class DreamService : IDreamService
         return Result.Success();
     }
 
-    public Result UnReactToDream(RequestUser requestUser, Guid dreamReference)
+    public Result UnReactToDream(UserModel requestUser, Guid dreamReference)
     {
         var userResult = _userRepository.GetByReference(requestUser.Reference);
         if (!userResult.TrySuccess(out var user))
@@ -138,7 +138,7 @@ public sealed class DreamService : IDreamService
         return Result.Success();
     }
 
-    public Result<GetReelResponse> GetReel(RequestUser requestUser)
+    public Result<GetReelResponse> GetReel(UserModel requestUser)
     {
         var userResult = _userRepository.GetByReference(requestUser.Reference);
         if (!userResult.TrySuccess(out var user))

@@ -1,17 +1,17 @@
-﻿using Api.Types;
+﻿using Core.Models;
 
 namespace Api.Services;
 
 public interface IRequestService
 {
-    RequestUser User(HttpRequest request);
+    UserModel User(HttpRequest request);
 }
 
 public sealed class RequestService : IRequestService
 {
-    public RequestUser User(HttpRequest request)
+    public UserModel User(HttpRequest request)
     {
-        if (request.HttpContext.Items["user"] is not RequestUser user)
+        if (request.HttpContext.Items["user"] is not UserModel user)
             throw new ArgumentException("No user on the request.");
 
         return user;
