@@ -9,7 +9,7 @@ public interface IUserRepository
 {
     UserRecord SaveUser(UserRecord user);
     UserRecord UpdateUser(UserRecord user);
-    UserRecord DeleteUser(UserRecord user);
+    void DeleteUser(UserRecord user);
     Result<UserRecord> GetByUsername(string username);
     Result<UserRecord> GetByReference(Guid reference);
 }
@@ -22,7 +22,7 @@ public sealed class UserRepository : ApiRepository, IUserRepository
 
     public UserRecord SaveUser(UserRecord user) => Save(user);
     public UserRecord UpdateUser(UserRecord user) => Update(user);
-    public UserRecord DeleteUser(UserRecord user) => Delete(user);
+    public void DeleteUser(UserRecord user) => Delete(user);
 
     public Result<UserRecord> GetByUsername(string username)
     {

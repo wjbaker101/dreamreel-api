@@ -9,7 +9,7 @@ public interface IDreamRepository
 {
     DreamRecord SaveDream(DreamRecord dream);
     DreamRecord UpdateDream(DreamRecord dream);
-    DreamRecord DeleteDream(DreamRecord dream);
+    void DeleteDream(DreamRecord dream);
     Result<DreamRecord> GetByReference(Guid reference);
     List<DreamRecord> GetByUsers(IEnumerable<UserRecord> users);
 }
@@ -22,7 +22,7 @@ public sealed class DreamRepository : ApiRepository, IDreamRepository
 
     public DreamRecord SaveDream(DreamRecord dream) => Save(dream);
     public DreamRecord UpdateDream(DreamRecord dream) => Update(dream);
-    public DreamRecord DeleteDream(DreamRecord dream) => Delete(dream);
+    public void DeleteDream(DreamRecord dream) => Delete(dream);
 
     public Result<DreamRecord> GetByReference(Guid reference)
     {
