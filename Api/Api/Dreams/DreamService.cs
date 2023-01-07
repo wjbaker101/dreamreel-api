@@ -43,7 +43,7 @@ public sealed class DreamService : IDreamService
             Title = request.Title,
             Content = request.Content,
             DreamedAt = request.DreamedAt,
-            Type = request.Type
+            Type = (DreamTypeDb)request.Type
         });
 
         return new CreateDreamResponse
@@ -68,7 +68,7 @@ public sealed class DreamService : IDreamService
         dream.Title = request.Title;
         dream.Content = request.Content;
         dream.DreamedAt = request.DreamedAt;
-        dream.Type = request.Type;
+        dream.Type = (DreamTypeDb)request.Type;
 
         _dreamRepository.UpdateDream(dream);
 
