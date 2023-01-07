@@ -13,7 +13,7 @@ public sealed class GetReelResponse
         public string Title { get; init; } = null!;
         public string Content { get; init; } = null!;
         public DateTime DreamedAt { get; init; }
-        public DreamType Type { get; init; }
+        public DreamTypeDb Type { get; init; }
         public List<string> Reactions { get; init; } = new();
         public User User { get; init; } = null!;
     }

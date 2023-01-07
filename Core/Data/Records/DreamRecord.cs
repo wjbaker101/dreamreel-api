@@ -11,11 +11,11 @@ public class DreamRecord
     public virtual string Title { get; set; } = null!;
     public virtual string Content { get; set; } = null!;
     public virtual DateTime DreamedAt { get; set; }
-    public virtual DreamType Type { get; set; }
+    public virtual DreamTypeDb Type { get; set; }
     public virtual ISet<DreamUserRecord> DreamUser { get; init; } = new HashSet<DreamUserRecord>();
 }
 
-public enum DreamType
+public enum DreamTypeDb
 {
     Unknown = 0,
     Dream = 1,
@@ -35,7 +35,7 @@ public sealed class DreamRecordMap : ClassMap<DreamRecord>
         Map(x => x.Title, "title");
         Map(x => x.Content, "content");
         Map(x => x.DreamedAt, "dreamed_at");
-        Map(x => x.Type, "type").CustomType<DreamType>();
+        Map(x => x.Type, "type").CustomType<DreamTypeDb>();
         HasMany(x => x.DreamUser).KeyColumn("dream_id");
     }
 }
