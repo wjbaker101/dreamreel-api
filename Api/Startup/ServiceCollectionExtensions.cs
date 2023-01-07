@@ -17,6 +17,7 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IAuthService, AuthService>();
         services.AddSingleton<ILoginTokenService, LoginTokenService>();
+        services.AddSingleton<IPasswordService, PasswordService>();
 
         services.AddSingleton<IUserService, UserService>();
         services.AddSingleton<IUserValidationService, UserValidationService>();

@@ -13,11 +13,13 @@ public sealed class AuthService : IAuthService
 {
     private readonly IUserRepository _userRepository;
     private readonly ILoginTokenService _loginTokenService;
+    private readonly IPasswordService _passwordService;
 
-    public AuthService(IUserRepository userRepository, ILoginTokenService loginTokenService)
+    public AuthService(IUserRepository userRepository, ILoginTokenService loginTokenService, IPasswordService passwordService)
     {
         _userRepository = userRepository;
         _loginTokenService = loginTokenService;
+        _passwordService = passwordService;
     }
 
     public Result<LogInResponse> LogIn(LogInRequest request)
@@ -26,7 +28,7 @@ public sealed class AuthService : IAuthService
         if (!userResult.TrySuccess(out var user))
             return Result<LogInResponse>.FromFailure(userResult);
 
-        var isPasswordValid = PasswordService.Verify(request.Password, user.PasswordSalt, user.Password);
+        var isPasswordValid = _passwordService.Verify(request.Password, user.PasswordSalt, user.Password);
         if (!isPasswordValid)
             return Result<LogInResponse>.Failure("Incorrect password for that user.");
 
