@@ -2,6 +2,7 @@
 using Api.Api.Users.Types;
 using Core.Data.Records;
 using Core.Data.Repositories;
+using Core.Extensions;
 using Core.Models;
 using Core.Models.Mappers;
 using Core.Types;
@@ -65,9 +66,9 @@ public sealed class UserService : IUserService
         return new GetUserResponse
         {
             User = UserMapper.Map(user),
-            Dreams = user.Dreams.Select(DreamMapper.Map).ToList(),
-            Follows = user.Follows.Select(UserMapper.Map).ToList(),
-            Followers = user.Followers.Select(UserMapper.Map).ToList()
+            Dreams = user.Dreams.ConvertAll(DreamMapper.Map),
+            Follows = user.Follows.ConvertAll(UserMapper.Map),
+            Followers = user.Followers.ConvertAll(UserMapper.Map)
         };
     }
 

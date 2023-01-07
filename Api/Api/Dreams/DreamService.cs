@@ -148,14 +148,12 @@ public sealed class DreamService : IDreamService
 
         return new GetReelResponse
         {
-            Dreams = dreams
-                .Select(dream => new GetReelResponse.DreamDetails
-                {
-                    Dream = DreamMapper.Map(dream),
-                    User = UserMapper.Map(user),
-                    Reactions = dream.DreamUser.Select(x => x.Reaction).Where(x => x != null).ToList()
-                })
-                .ToList()
+            Dreams = dreams.ConvertAll(dream => new GetReelResponse.DreamDetails
+            {
+                Dream = DreamMapper.Map(dream),
+                User = UserMapper.Map(user),
+                Reactions = dream.DreamUser.Select(x => x.Reaction).Where(x => x != null).ToList()
+            })
         };
     }
 }
