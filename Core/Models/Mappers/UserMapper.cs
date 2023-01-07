@@ -10,7 +10,8 @@ public static class UserMapper
         {
             Reference = user.Reference,
             CreatedAt = user.CreatedAt,
-            Username = user.Username
+            Username = user.Username,
+            AvatarUrl = user.AvatarUrl
         };
     }
 }
