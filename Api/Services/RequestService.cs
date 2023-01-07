@@ -1,4 +1,5 @@
-﻿using Core.Models;
+﻿using Api.Api.Auth.Attributes;
+using Core.Models;
 
 namespace Api.Services;
 
@@ -11,7 +12,7 @@ public sealed class RequestService : IRequestService
 {
     public UserModel User(HttpRequest request)
     {
-        if (request.HttpContext.Items["user"] is not UserModel user)
+        if (request.HttpContext.Items[RequireUserAttribute.HTTP_CONTEXT_ITEM_NAME] is not UserModel user)
             throw new ArgumentException("No user on the request.");
 
         return user;

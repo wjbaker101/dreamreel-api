@@ -8,6 +8,8 @@ namespace Api.Api.Auth.Attributes;
 [AttributeUsage(AttributeTargets.Method)]
 public sealed class RequireUserAttribute : Attribute, IAuthorizationFilter
 {
+    public const string HTTP_CONTEXT_ITEM_NAME = "user";
+
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         var header = context.HttpContext.Request.Headers["Authorization"].ToString();
@@ -31,6 +33,6 @@ public sealed class RequireUserAttribute : Attribute, IAuthorizationFilter
         if (user.IsFailure)
             throw new ApiForbiddenException();
 
-        context.HttpContext.Items["user"] = UserMapper.Map(user.Value);
+        context.HttpContext.Items[HTTP_CONTEXT_ITEM_NAME] = UserMapper.Map(user.Value);
     }
 }
