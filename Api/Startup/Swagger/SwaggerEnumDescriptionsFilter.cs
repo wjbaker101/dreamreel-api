@@ -2,7 +2,7 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Api.Startup;
+namespace Api.Startup.Swagger;
 
 public class SwaggerEnumDescriptionsFilter : ISchemaFilter
 {

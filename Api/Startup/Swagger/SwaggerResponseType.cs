@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Startup;
+namespace Api.Startup.Swagger;
 
 public sealed class SwaggerResponseTypeAttribute : ProducesResponseTypeAttribute
 {

@@ -1,5 +1,6 @@
 using Api.Filters;
 using Api.Startup;
+using Api.Startup.Swagger;
 using Core.Settings;
 using Microsoft.OpenApi.Models;
 using System.Reflection;

@@ -1,7 +1,7 @@
 ﻿using Api.Api.Auth.Attributes;
 using Api.Api.Dreams.Types;
 using Api.Services;
-using Api.Startup;
+using Api.Startup.Swagger;
 using Api.Types;
 using Microsoft.AspNetCore.Mvc;
 
