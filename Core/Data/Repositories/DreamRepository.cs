@@ -12,6 +12,7 @@ public interface IDreamRepository
     void DeleteDream(DreamRecord dream);
     Result<DreamRecord> GetByReference(Guid reference);
     List<DreamRecord> GetByUsers(IEnumerable<UserRecord> users);
+    Dictionary<long, int> GetCountsByUsers(IEnumerable<UserRecord> users);
 }
 
 public sealed class DreamRepository : ApiRepository, IDreamRepository
@@ -56,5 +57,26 @@ public sealed class DreamRepository : ApiRepository, IDreamRepository
         transaction.Commit();
 
         return dreams;
+    }
+
+    public Dictionary<long, int> GetCountsByUsers(IEnumerable<UserRecord> users)
+    {
+        using var session = Database.SessionFactory.OpenSession();
+        using var transaction = session.BeginTransaction();
+
+        var countsByUsers = session
+            .Query<DreamRecord>()
+            .Where(x => users.Contains(x.User))
+            .GroupBy(x => x.User)
+            .Select(x => new
+            {
+                User = x.Key,
+                Count = x.Count()
+            })
+            .ToDictionary(x => x.User.Id, x => x.Count);
+
+        transaction.Commit();
+
+        return countsByUsers;
     }
 }
