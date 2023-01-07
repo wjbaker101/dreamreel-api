@@ -15,6 +15,8 @@ public interface ILoginTokenService
 
 public sealed class LoginTokenService : ILoginTokenService
 {
+    private const string USER_REFERENCE_CLAIM_TYPE = "userReference";
+
     private readonly string _secretKey;
 
     public LoginTokenService(AppSecrets appSecrets)
@@ -35,7 +37,7 @@ public sealed class LoginTokenService : ILoginTokenService
             SigningCredentials = credentials,
             Subject = new ClaimsIdentity(new Claim[]
             {
-                new("userReference", userReference.ToString())
+                new(USER_REFERENCE_CLAIM_TYPE, userReference.ToString())
             })
         };
 
@@ -54,7 +56,7 @@ public sealed class LoginTokenService : ILoginTokenService
             };
 
             var principle = new JwtSecurityTokenHandler().ValidateToken(loginToken, parameters, out var _);
-            var userReference = principle.Claims.Single(x => x.Type == "userReference");
+            var userReference = principle.Claims.Single(x => x.Type == USER_REFERENCE_CLAIM_TYPE);
 
             return Guid.Parse(userReference.Value);
         }
