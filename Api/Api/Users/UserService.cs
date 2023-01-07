@@ -3,6 +3,7 @@ using Api.Api.Users.Types;
 using Api.Types;
 using Core.Data.Records;
 using Core.Data.Repositories;
+using Core.Models.Mappers;
 using Core.Types;
 
 namespace Api.Api.Users;
@@ -51,9 +52,7 @@ public sealed class UserService : IUserService
 
         return new CreateUserResponse
         {
-            Reference = user.Reference,
-            CreatedAt = user.CreatedAt,
-            Username = user.Username
+            User = UserMapper.Map(user)
         };
     }
 
@@ -65,9 +64,7 @@ public sealed class UserService : IUserService
 
         return new GetUserResponse
         {
-            Reference = user.Reference,
-            CreatedAt = user.CreatedAt,
-            Username = user.Username,
+            User = UserMapper.Map(user),
             Dreams = user.Dreams
                 .Select(x => new GetUserResponse.Dream
                 {
@@ -114,9 +111,7 @@ public sealed class UserService : IUserService
 
         return new UpdateUserResponse
         {
-            Reference = user.Reference,
-            CreatedAt = user.CreatedAt,
-            Username = user.Username
+            User = UserMapper.Map(user)
         };
     }
 
