@@ -65,33 +65,9 @@ public sealed class UserService : IUserService
         return new GetUserResponse
         {
             User = UserMapper.Map(user),
-            Dreams = user.Dreams
-                .Select(x => new GetUserResponse.Dream
-                {
-                    Reference = x.Reference,
-                    CreatedAt = x.CreatedAt,
-                    Title = x.Title,
-                    Content = x.Content,
-                    DreamedAt = x.DreamedAt,
-                    Type = x.Type
-                })
-                .ToList(),
-            Follows = user.Follows
-                .Select(x => new GetUserResponse.OtherUser
-                {
-                    Reference = x.Reference,
-                    CreatedAt = x.CreatedAt,
-                    Username = x.Username
-                })
-                .ToList(),
-            Followers = user.Followers
-                .Select(x => new GetUserResponse.OtherUser
-                {
-                    Reference = x.Reference,
-                    CreatedAt = x.CreatedAt,
-                    Username = x.Username
-                })
-                .ToList()
+            Dreams = user.Dreams.Select(DreamMapper.Map).ToList(),
+            Follows = user.Follows.Select(UserMapper.Map).ToList(),
+            Followers = user.Followers.Select(UserMapper.Map).ToList()
         };
     }
 
