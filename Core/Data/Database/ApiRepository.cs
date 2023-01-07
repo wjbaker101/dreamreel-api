@@ -59,7 +59,7 @@ public abstract class ApiRepository
         return records;
     }
 
-    public T Delete<T>(T record)
+    public void Delete<T>(T record)
     {
         using var session = Database.SessionFactory.OpenSession();
         using var transaction = session.BeginTransaction();
@@ -67,11 +67,9 @@ public abstract class ApiRepository
         session.Delete(record);
 
         transaction.Commit();
-
-        return record;
     }
 
-    public IEnumerable<T> DeleteMany<T>(IEnumerable<T> records)
+    public void DeleteMany<T>(IEnumerable<T> records)
     {
         using var session = Database.SessionFactory.OpenSession();
         using var transaction = session.BeginTransaction();
@@ -80,7 +78,5 @@ public abstract class ApiRepository
             session.Delete(record);
 
         transaction.Commit();
-
-        return records;
     }
 }
