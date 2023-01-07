@@ -8,6 +8,7 @@ public interface IDreamUserRepository
 {
     DreamUserRecord SaveDreamUser(DreamUserRecord dreamUser);
     DreamUserRecord UpdateDreamUser(DreamUserRecord dreamUser);
+    void DeleteDreamUser(DreamUserRecord dreamUser);
     Result<DreamUserRecord> Get(DreamRecord dream, UserRecord user);
 }
 
@@ -19,6 +20,7 @@ public sealed class DreamUserRepository : ApiRepository, IDreamUserRepository
 
     public DreamUserRecord SaveDreamUser(DreamUserRecord dreamUser) => Save(dreamUser);
     public DreamUserRecord UpdateDreamUser(DreamUserRecord dreamUser) => Update(dreamUser);
+    public void DeleteDreamUser(DreamUserRecord dreamUser) => Delete(dreamUser);
 
     public Result<DreamUserRecord> Get(DreamRecord dream, UserRecord user)
     {
