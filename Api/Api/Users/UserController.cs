@@ -74,6 +74,7 @@ public sealed class UserController : ApiController
     [HttpDelete]
     [Route("{userReference:guid}")]
     [SwaggerResponseType(typeof(bool))]
+    [RequireUser]
     public IActionResult DeleteUser([FromRoute] Guid userReference)
     {
         var user = _requestService.User(Request);
