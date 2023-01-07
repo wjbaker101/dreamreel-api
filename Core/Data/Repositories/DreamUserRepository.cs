@@ -10,6 +10,7 @@ public interface IDreamUserRepository
     DreamUserRecord UpdateDreamUser(DreamUserRecord dreamUser);
     void DeleteDreamUser(DreamUserRecord dreamUser);
     Result<DreamUserRecord> Get(DreamRecord dream, UserRecord user);
+    void DeleteAllByUser(UserRecord user);
 }
 
 public sealed class DreamUserRepository : ApiRepository, IDreamUserRepository
@@ -37,5 +38,20 @@ public sealed class DreamUserRepository : ApiRepository, IDreamUserRepository
             return Result<DreamUserRecord>.Failure("Dream user could not be found.");
 
         return dreamUser;
+    }
+
+    public void DeleteAllByUser(UserRecord user)
+    {
+        using var session = Database.SessionFactory.OpenSession();
+        using var transaction = session.BeginTransaction();
+
+        var dreamUsers = session
+            .Query<DreamUserRecord>()
+            .Where(x => x.User == user)
+            .ToList();
+
+        DeleteMany(dreamUsers);
+
+        transaction.Commit();
     }
 }
