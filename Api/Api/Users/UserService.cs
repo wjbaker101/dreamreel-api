@@ -23,12 +23,18 @@ public sealed class UserService : IUserService
     private readonly IUserRepository _userRepository;
     private readonly IUserValidationService _userValidationService;
     private readonly IPasswordService _passwordService;
+    private readonly IUserAvatarService _userAvatarService;
 
-    public UserService(IUserRepository userRepository, IUserValidationService userValidationService, IPasswordService passwordService)
+    public UserService(
+        IUserRepository userRepository,
+        IUserValidationService userValidationService,
+        IPasswordService passwordService,
+        IUserAvatarService userAvatarService)
     {
         _userRepository = userRepository;
         _userValidationService = userValidationService;
         _passwordService = passwordService;
+        _userAvatarService = userAvatarService;
     }
 
     public Result<CreateUserResponse> CreateUser(CreateUserRequest request)
@@ -40,6 +46,10 @@ public sealed class UserService : IUserService
         var usernameValidResult = _userValidationService.ValidateUsername(request.Username);
         if (usernameValidResult.IsFailure)
             return Result<CreateUserResponse>.FromFailure(usernameValidResult);
+
+        var avatarResult = _userAvatarService.GetUrl();
+        if (avatarResult.IsFailure)
+            return Result<CreateUserResponse>.FromFailure(avatarResult);
 
         var salt = Guid.NewGuid();
         var hashedPassword = _passwordService.Hash(request.Password, salt);

@@ -12,6 +12,7 @@ services.AddSingleton(builder.Configuration.Get<AppSecrets>());
 services.AddSingleton(builder.Configuration.Get<AppSettings>());
 
 services.AddControllers();
+services.AddHttpClient();
 services.AddDependencies();
 services.AddSwagger();
 

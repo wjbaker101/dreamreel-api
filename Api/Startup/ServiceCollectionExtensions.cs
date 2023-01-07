@@ -19,6 +19,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ILoginTokenService, LoginTokenService>();
         services.AddSingleton<IPasswordService, PasswordService>();
 
+        services.AddSingleton<IUserAvatarService, UserAvatarService>();
         services.AddSingleton<IUserService, UserService>();
         services.AddSingleton<IUserValidationService, UserValidationService>();
 
