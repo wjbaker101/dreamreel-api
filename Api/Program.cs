@@ -1,3 +1,4 @@
+using Api.Filters;
 using Api.Startup;
 using Core.Settings;
 using Microsoft.OpenApi.Models;
@@ -13,6 +14,11 @@ services.AddSingleton(builder.Configuration.Get<AppSettings>());
 
 services.AddControllers();
 services.AddDependencies();
+
+services.AddMvc(options =>
+{
+    options.Filters.Add(typeof(GlobalExceptionFilter));
+});
 
 services.AddSwaggerGen(options =>
 {
