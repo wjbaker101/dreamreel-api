@@ -1,6 +1,7 @@
 ﻿using Core.Data.Database;
 using Core.Data.Records;
 using Core.Types;
+using NHibernate.Linq;
 
 namespace Core.Data.Repositories;
 
@@ -45,12 +46,10 @@ public sealed class DreamUserRepository : ApiRepository, IDreamUserRepository
         using var session = Database.SessionFactory.OpenSession();
         using var transaction = session.BeginTransaction();
 
-        var dreamUsers = session
+        session
             .Query<DreamUserRecord>()
             .Where(x => x.User == user)
-            .ToList();
-
-        DeleteMany(dreamUsers);
+            .Delete();
 
         transaction.Commit();
     }
