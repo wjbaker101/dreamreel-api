@@ -67,6 +67,23 @@ public sealed class UserController : ApiController
     }
 
     /// <summary>
+    /// Deletes a user (requires logged in user)
+    /// </summary>
+    /// <param name="userReference"></param>
+    /// <returns></returns>
+    [HttpDelete]
+    [Route("{userReference:guid}")]
+    [SwaggerResponseType(typeof(bool))]
+    public IActionResult DeleteUser([FromRoute] Guid userReference)
+    {
+        var user = _requestService.User(Request);
+
+        var result = _userService.DeleteUser(user, userReference);
+
+        return ToApiResponse(result);
+    }
+
+    /// <summary>
     /// Follows a user (requires logged in user)
     /// </summary>
     /// <param name="userReference"></param>

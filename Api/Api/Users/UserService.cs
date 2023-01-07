@@ -14,6 +14,7 @@ public interface IUserService
     Result<CreateUserResponse> CreateUser(CreateUserRequest request);
     Result<GetUserResponse> GetUser(Guid userReference);
     Result<UpdateUserResponse> UpdateUser(Guid userReference, UpdateUserRequest request);
+    Result DeleteUser(UserModel requestUser, Guid userToDeleteReference);
     Result FollowUser(UserModel requestUser, Guid userToFollowReference);
     Result UnFollowUser(UserModel requestUser, Guid userToUnFollowReference);
 }
@@ -24,17 +25,20 @@ public sealed class UserService : IUserService
     private readonly IUserValidationService _userValidationService;
     private readonly IPasswordService _passwordService;
     private readonly IUserAvatarService _userAvatarService;
+    private readonly IDreamUserRepository _dreamUserRepository;
 
     public UserService(
         IUserRepository userRepository,
         IUserValidationService userValidationService,
         IPasswordService passwordService,
-        IUserAvatarService userAvatarService)
+        IUserAvatarService userAvatarService,
+        IDreamUserRepository dreamUserRepository)
     {
         _userRepository = userRepository;
         _userValidationService = userValidationService;
         _passwordService = passwordService;
         _userAvatarService = userAvatarService;
+        _dreamUserRepository = dreamUserRepository;
     }
 
     public Result<CreateUserResponse> CreateUser(CreateUserRequest request)
@@ -103,6 +107,26 @@ public sealed class UserService : IUserService
         {
             User = UserMapper.Map(user)
         };
+    }
+
+    public Result DeleteUser(UserModel requestUser, Guid userToDeleteReference)
+    {
+        var userResult = _userRepository.GetByReference(requestUser.Reference);
+        if (!userResult.TrySuccess(out var user))
+            return Result<UpdateUserResponse>.FromFailure(userResult);
+
+        var userToDeleteResult = _userRepository.GetByReference(userToDeleteReference);
+        if (!userToDeleteResult.TrySuccess(out var userToDelete))
+            return Result<UpdateUserResponse>.FromFailure(userToDeleteResult);
+
+        if (user.Id != userToDelete.Id)
+            return Result.Failure("You can only delete your own user.");
+
+        _dreamUserRepository.DeleteAllByUser(userToDelete);
+
+        _userRepository.DeleteUser(userToDelete);
+
+        return Result.Success();
     }
 
     public Result FollowUser(UserModel requestUser, Guid userToFollowReference)
