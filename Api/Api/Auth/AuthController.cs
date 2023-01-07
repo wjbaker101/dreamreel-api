@@ -1,5 +1,6 @@
 ﻿using Api.Api.Auth.Types;
 using Api.Services;
+using Api.Startup.Swagger;
 using Api.Types;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,7 @@ public sealed class AuthController : ApiController
     /// <returns></returns>
     [HttpPost]
     [Route("log_in")]
+    [SwaggerResponseType(typeof(LogInResponse))]
     public IActionResult LogIn([FromBody] LogInRequest request)
     {
         var result = _authService.LogIn(request);
