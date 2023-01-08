@@ -14,6 +14,7 @@ public interface IUserService
     Result<CreateUserResponse> CreateUser(CreateUserRequest request);
     Result<GetUserResponse> GetUser(Guid userReference);
     Result<UpdateUserResponse> UpdateUser(Guid userReference, UpdateUserRequest request);
+    Result<GetFollowingResponse> GetFollowing(Guid userReference);
     Result DeleteUser(UserModel requestUser, Guid userToDeleteReference);
     Result FollowUser(UserModel requestUser, Guid userToFollowReference);
     Result UnFollowUser(UserModel requestUser, Guid userToUnFollowReference);
@@ -26,19 +27,22 @@ public sealed class UserService : IUserService
     private readonly IPasswordService _passwordService;
     private readonly IUserAvatarService _userAvatarService;
     private readonly IDreamUserRepository _dreamUserRepository;
+    private readonly IDreamRepository _dreamRepository;
 
     public UserService(
         IUserRepository userRepository,
         IUserValidationService userValidationService,
         IPasswordService passwordService,
         IUserAvatarService userAvatarService,
-        IDreamUserRepository dreamUserRepository)
+        IDreamUserRepository dreamUserRepository,
+        IDreamRepository dreamRepository)
     {
         _userRepository = userRepository;
         _userValidationService = userValidationService;
         _passwordService = passwordService;
         _userAvatarService = userAvatarService;
         _dreamUserRepository = dreamUserRepository;
+        _dreamRepository = dreamRepository;
     }
 
     public Result<CreateUserResponse> CreateUser(CreateUserRequest request)
@@ -127,6 +131,26 @@ public sealed class UserService : IUserService
         _userRepository.DeleteUser(userToDelete);
 
         return Result.Success();
+    }
+
+    public Result<GetFollowingResponse> GetFollowing(Guid userReference)
+    {
+        var userResult = _userRepository.GetByReference(userReference);
+        if (!userResult.TrySuccess(out var user))
+            return Result<GetFollowingResponse>.FromFailure(userResult);
+
+        var following = _userRepository.GetFollowingByUser(user);
+
+        var dreamCounts = _dreamRepository.GetCountsByUsers(following);
+
+        return new GetFollowingResponse
+        {
+            Users = following.ConvertAll(x => new GetFollowingResponse.UserDetails
+            {
+                User = UserMapper.Map(x),
+                TotalDreams = dreamCounts.GetValueOrDefault(x.Id, 0)
+            })
+        };
     }
 
     public Result FollowUser(UserModel requestUser, Guid userToFollowReference)

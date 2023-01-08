@@ -12,6 +12,7 @@ public interface IUserRepository
     void DeleteUser(UserRecord user);
     Result<UserRecord> GetByUsername(string username);
     Result<UserRecord> GetByReference(Guid reference);
+    List<UserRecord> GetFollowingByUser(UserRecord user);
 }
 
 public sealed class UserRepository : ApiRepository, IUserRepository
@@ -70,5 +71,22 @@ public sealed class UserRepository : ApiRepository, IUserRepository
             return Result<UserRecord>.Failure("Unable to find user with that reference.");
 
         return user;
+    }
+
+    public List<UserRecord> GetFollowingByUser(UserRecord user)
+    {
+        using var session = Database.SessionFactory.OpenSession();
+        using var transaction = session.BeginTransaction();
+
+        var users = session
+            .Query<UserFollowingRecord>()
+            .Fetch(x => x.FollowingUser)
+            .Where(x => x.User == user)
+            .Select(x => x.FollowingUser)
+            .ToList();
+
+        transaction.Commit();
+
+        return users;
     }
 }

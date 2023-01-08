@@ -85,6 +85,21 @@ public sealed class UserController : ApiController
     }
 
     /// <summary>
+    /// Gets the users that a user follows
+    /// </summary>
+    /// <param name="userReference"></param>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("{userReference:guid}/following")]
+    [SwaggerResponseType(typeof(GetFollowingResponse))]
+    public IActionResult GetFollowing([FromRoute] Guid userReference)
+    {
+        var result = _userService.GetFollowing(userReference);
+
+        return ToApiResponse(result);
+    }
+
+    /// <summary>
     /// Follows a user (requires logged in user)
     /// </summary>
     /// <param name="userReference"></param>

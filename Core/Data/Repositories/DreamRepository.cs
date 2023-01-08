@@ -70,10 +70,10 @@ public sealed class DreamRepository : ApiRepository, IDreamRepository
             .GroupBy(x => x.User)
             .Select(x => new
             {
-                User = x.Key,
+                User = x.Key.Id,
                 Count = x.Count()
             })
-            .ToDictionary(x => x.User.Id, x => x.Count);
+            .ToDictionary(x => x.User, x => x.Count);
 
         transaction.Commit();
 
